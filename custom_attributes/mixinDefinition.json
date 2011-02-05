@@ -1,0 +1,14 @@
+{
+   "ThingMagic": {
+       "RFID tag": {
+           "type": "STRING",
+           "index": true,
+           "noCopy": true
+       }
+       "Updated at": {
+           "type": "STRING",
+           "noCopy": true
+       }
+   }
+}
+

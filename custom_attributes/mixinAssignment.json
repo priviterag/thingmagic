@@ -1,0 +1,9 @@
+{
+   "assignments": [
+       {
+           "select": [ "Equipment" ],
+           "mixins": [ "ThingMagic" ]
+       }
+   ]
+}
+

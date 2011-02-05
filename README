@@ -1,0 +1,75 @@
+----------------------------------------------
+git version control system http://git-scm.com/
+----------------------------------------------
+openSUSE
+$ sudo zypper install git-core
+
+
+----------------------------------------------
+development server
+----------------------------------------------
+openSUSE 11.2
+
+peppe@linux-1bgn:~> uname -a
+Linux linux-1bgn 2.6.31.5-0.1-desktop #1 SMP PREEMPT 2009-10-26 15:49:03 +0100 x86_64 x86_64 x86_64 GNU/Linux
+peppe@linux-1bgn:~> java -version
+java version "1.6.0_23"
+Java(TM) SE Runtime Environment (build 1.6.0_23-b05)
+Java HotSpot(TM) 64-Bit Server VM (build 19.0-b09, mixed mode)
+peppe@linux-1bgn:~> jruby -v
+jruby 1.6.0.RC1 (ruby 1.8.7 patchlevel 330) (2011-01-10 769f847) (Java HotSpot(TM) 64-Bit Server VM 1.6.0_23) [linux-amd64-java]
+
+
+----------------------------------------------
+Prerequisites
+----------------------------------------------
+1) Visionael NRM (tested on Version: 10.3.0-SNAPSHOT)
+
+2) java
+
+3) jruby - http://www.jruby.org/getting-started
+easy install; download the binaries, unpack and update your $PATH
+
+
+----------------------------------------------
+Installation
+----------------------------------------------
+$ git clone git://github.com/priviterag/thingmagic.git
+
+update your $CLASSPATH to add the jars in the libs subdir
+e.g.: export CLASSPATH=$CLASSPATH:/opt/thingmagic/libs/libs/mercuryapi.jar:/opt/thingmagic/libs/appserv-admin-2.1.jar:/opt/thingmagic/libs/appserv-deployment-client-2.1.jar:/opt/thingmagic/libs/appserv-ext-2.1.jar:/opt/thingmagic/libs/appserv-rt-2.1.jar:/opt/thingmagic/libs/imqjmsra-2.1.jar:/opt/thingmagic/libs/j3d-core-1.3.1.jar:/opt/thingmagic/libs/javaee-2.1.jar:/opt/thingmagic/libs/log4j-1.2.16.jar:/opt/thingmagic/libs/vecmath-1.3.1.jar:/opt/thingmagic/libs/vnd_core_api-10.3.0-SNAPSHOT.jar:/opt/thingmagic/libs/vnd_entities.jar
+
+
+----------------------------------------------
+NRM 10 custom attributes (version >= 10.3)
+----------------------------------------------
+merge or copy custom_attributes/mixinAssignment.json and custom_attributes/mixinDefinition.json
+into the 'persist' subdir of your nrm10 installation path
+
+restart the nrm
+
+
+----------------------------------------------
+Configuration
+----------------------------------------------
+to change the default values, edit configuration.rb 
+VISHOST = HOST # Visionael NRM10 server
+VISPORT = 3700 # Visionael NRM10 server port
+
+
+----------------------------------------------
+Test
+----------------------------------------------
+$ cd thingmagic
+$ ./reader.rb #start the reader process
+
+
+----------------------------------------------
+Updates
+----------------------------------------------
+To update your local copy execute:
+$ cd thingmagic
+$ git pull
+
+
+
