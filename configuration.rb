@@ -4,8 +4,7 @@ java_import com.thingmagic.Reader
 VISHOST = 'localhost' # Visionael NRM10 server
 VISPORT = 3700 # Visionael NRM10 server port
 
-VCHASSISSPEC = '2201 Rack Assembly' # 13 slot virtual chassis used to place cards
-VRACKSPECK = 'Bell Atlantic 5ESS' # virtual rack used to place devices
+CARDBOXCHASSISSPEC = '2201 Rack Assembly' # 13 slot virtual chassis used to place cards
 
 #readers configuration
 DURATION = 500 # the time to spend reading tags, in milliseconds 

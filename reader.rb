@@ -28,12 +28,19 @@ begin
   readers.each { |reader| 
     next if !reader.initialized
     threads << Thread.new(reader) { |r|
-      puts "reader #{r.name} started"
+      puts "#{r.name} started"
       while !interrupted
-        tags = r.read(DURATION)
-        tags.each { |tag| puts "#{tag.getTime} - #{tag.epcString} at #{r.name}" }
+        begin
+          tags = r.read(DURATION)
+          tags.each { |tag| 
+            puts "#{r.name} - tag read - #{tag.epcString}" 
+            r.process_tag tag.epcString
+          }
+        rescue Exception => e
+          puts "#{r.name} error - #{e.message}"
+        end
       end
-      puts "reader #{r.name} stopped"
+      puts "#{r.name} stopped"
     }
   }
   threads.each {|thr| thr.join }

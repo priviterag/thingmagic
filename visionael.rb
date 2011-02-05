@@ -4,8 +4,11 @@ java_import com.visionael.api.ApiFactory
 java_import com.visionael.api.vnd.query.Query
 java_import com.visionael.api.vfd.dto.facility.DetachedPlan
 java_import com.visionael.api.vfd.dto.facility.DetachedBayline
+java_import com.visionael.api.vfd.dto.equipment.DetachedChassis
 java_import com.visionael.api.vfd.dto.equipment.DetachedDevice
+java_import com.visionael.api.vfd.dto.equipment.DetachedCard
 java_import com.visionael.api.vfd.dto.equipment.DetachedRack
+java_import com.visionael.api.vfd.library.LibrarySearchFilter
 
 class ApplicationError < StandardError ;end
  
@@ -28,5 +31,14 @@ def find_entities_by_mixin klass, mixin, conditions
       }
     )
   ).getRootEntities
+end
+
+def get_model(search_filter)
+  begin
+    spec_description_key = $library_api.findSpecDescriptions(search_filter)[0]
+    $facility_api.getModelFromLibraryKey(spec_description_key)
+  rescue Exception => e
+    return nil
+  end
 end
 
