@@ -35,11 +35,13 @@ begin
           tags.each { |tag| 
             puts "#{r.name} - tag read - #{tag.epcString}" 
             r.process_tag tag.epcString
+            sleep(SLEEP_MIN+rand(SLEEP_RANGE)) if r.simulated?
           }
         rescue Exception => e
           puts "#{r.name} error - #{e.message}"
         end
       end
+      r.destroy
       puts "#{r.name} stopped"
     }
   }

@@ -42,3 +42,12 @@ def get_model(search_filter)
   end
 end
 
+def get_device_model device
+  get_related_entities(device, 'model').iterator.next
+end
+
+def get_related_entities entity , relationship
+  $facility_api.find(entity,Query.findRelatives(relationship)).getRelatedEntities(entity,relationship)
+end
+
+

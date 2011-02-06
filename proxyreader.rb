@@ -22,17 +22,35 @@ TAGS = [
   TagReadData.new('rfid3'),
   TagReadData.new('rfid4'),
   TagReadData.new('rfid5'),
-  TagReadData.new('rfid6')
+  TagReadData.new('rfid6'),
+  TagReadData.new('rfid7'),
+  TagReadData.new('rfid8'),
+  TagReadData.new('rfid9'),
+  TagReadData.new('rfid10')
 ]
+
+TAGS_NUM = 10
+SLEEP_MIN = 10
+SLEEP_RANGE = 20
+SIMULATED = true
 #end of simulation data
 
 #one object for each physical RFID reader
 class ProxyReader
   attr_reader :initialized
-  @@simulated = true #poll real reader
+  
+  def simulated?
+    SIMULATED
+  end
+  def sleep_min
+    SLEEP_MIN
+  end
+  def sleep_range
+    SLEEP_RANGE
+  end
   
   def name
-    "#{@reader_url}@#{@parent_entity_name}"
+    "#{@parent_entity_name}@#{@reader_url}"
   end
   
   def initialize(parent_entity_name, reader_url)
@@ -47,11 +65,11 @@ class ProxyReader
   
   #proxy read
   def read duration
-    if !@@simulated
+    if !simulated?
       @reader.read(duration);
     else
-      sleep(2+rand(10))
-      [TAGS[rand(3)],TAGS[3+rand(3)]]
+      #[TAGS[rand(3)],TAGS[3+rand(3)]]
+      [TAGS[rand(TAGS_NUM)]]
     end
   end
   
@@ -70,13 +88,14 @@ class ProxyReader
         puts "#{name} - equipment #{equipment.name} entered"
       end
     else
+      puts "#{name} - equipment #{equipment.name} entered"
       #$facility_api.addCardToDevice equipment, @cardbox_chassis, 100, 100, 0
     end
     
   end
   
   def destroy
-  	if !@@simulated
+  	if !simulated?
       @reader.destroy
   	end
   end
@@ -85,7 +104,7 @@ class ProxyReader
   
   def initialize_astra_reader #initialize the astra reader    
     begin
-    	if !@@simulated
+    	if !simulated?
         @reader = Reader.create(@reader_url);
         @reader.connect();
         @reader.paramSet("/reader/region/id", REGION);  	
@@ -112,16 +131,16 @@ class ProxyReader
     
     #search the virtual containers and create if not found
     if @parent.java_kind_of? DetachedRack
-      @cardbox_chassis = find_entity_by_name DetachedChassis.java_class, "cardbox chassis-#{@parent.name}" 
+      @cardbox_chassis = find_entity_by_name DetachedChassis.java_class, "cardbox-#{@parent.name}" 
       if @cardbox_chassis.nil?
-        @cardbox_chassis = $facility_api.createChassis(cardbox_chassis_model,"cardbox chassis-#{@parent.name}")
+        @cardbox_chassis = $facility_api.createChassis(cardbox_chassis_model,"cardbox-#{@parent.name}")
         $facility_api.addChassisToRack(@cardbox_chassis, @parent, 100);
         raise ApplicationError, "configure_containers - could not add cardbox" if @cardbox_chassis.nil?
       end
     elsif @parent.java_kind_of?(DetachedPlan) 
-      @cardbox_chassis = find_entity_by_name DetachedChassis.java_class, "cardbox chassis-#{@parent.name}" 
+      @cardbox_chassis = find_entity_by_name DetachedChassis.java_class, "cardbox-#{@parent.name}" 
       if @cardbox_chassis.nil?
-        @cardbox_chassis = $facility_api.createChassis(cardbox_chassis_model,"cardbox chassis-#{@parent.name}")
+        @cardbox_chassis = $facility_api.createChassis(cardbox_chassis_model,"cardbox-#{@parent.name}")
         $facility_api.addItemToPlan(@cardbox_chassis, @parent, 100,100,0);
         raise ApplicationError, "configure_containers - could not add cardbox" if @cardbox_chassis.nil?
       end
