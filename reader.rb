@@ -1,5 +1,3 @@
-#!/usr/bin/env jruby
-
 require 'visionael'
 require 'proxyreader'
 require 'configuration'
