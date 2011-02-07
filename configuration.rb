@@ -17,3 +17,5 @@ READERS = [
   ['Sample - Depot Plan', 'tmr://192.168.1.203']
 ]
 
+SIMULATED = true #used for tests without real reader
+

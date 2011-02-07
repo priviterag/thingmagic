@@ -31,7 +31,6 @@ TAGS = [
 TAGS_NUM = TAGS.length
 SLEEP_MIN = 10
 SLEEP_RANGE = 20
-SIMULATED = true
 #end of simulation data
 
 #one object for each physical RFID reader

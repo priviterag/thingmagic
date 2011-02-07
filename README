@@ -70,6 +70,8 @@ READERS = [
   ['Sample - Depot Plan', 'tmr://192.168.1.203']
 ]
 
+SIMULATED = true #used for tests without real reader
+
 
 ----------------------------------------------
 Cardbox model creation
@@ -94,7 +96,7 @@ RFID tags gear association
 Log in into NRM and go to the 'Facilities Designer' application
 for each device/card you want to manage set the following attributes:
 RFID tag: the tag associated with the device
-Slot    : the slot of the cardbox where the device is going to be moved. Make sure each device goes to a different slot
+Slot    : the slot number of the cardbox where the device is going to be moved. Make sure each device goes to a different slot
 
 
 ----------------------------------------------
