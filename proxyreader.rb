@@ -28,7 +28,7 @@ TAGS = [
   TagReadData.new('rfid9'),
   TagReadData.new('rfid10')
 ]
-TAGS_NUM = TAGS.lenght
+TAGS_NUM = TAGS.length
 SLEEP_MIN = 10
 SLEEP_RANGE = 20
 SIMULATED = true
@@ -116,7 +116,6 @@ class ProxyReader
       
       #get the slot number       
       slot = slots[(equipment_slot-1)]
-      puts "slot: #{slot}"
       
       #add the card to the parent      
       $facility_api.addCardToDevice(card,cardbox,slot)
