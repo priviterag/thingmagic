@@ -28,7 +28,7 @@ Prerequisites
 2) java
 
 3) jruby - http://www.jruby.org/getting-started
-easy install; download the binaries, unpack and update your $PATH
+download the binaries, unpack and update your $PATH
 
 
 ----------------------------------------------
@@ -43,6 +43,7 @@ e.g.: export CLASSPATH=$CLASSPATH:/opt/thingmagic/libs/libs/mercuryapi.jar:/opt/
 ----------------------------------------------
 NRM 10 custom attributes (version >= 10.3)
 ----------------------------------------------
+IMPORTANT! do not override existing files
 merge or copy custom_attributes/mixinAssignment.json and custom_attributes/mixinDefinition.json
 into the 'persist' subdir of your nrm10 installation path
 
@@ -53,21 +54,59 @@ restart the nrm
 Configuration
 ----------------------------------------------
 to change the default values, edit configuration.rb 
-VISHOST = HOST # Visionael NRM10 server
+VISHOST = 'localhost' # Visionael NRM10 server
 VISPORT = 3700 # Visionael NRM10 server port
+
+CARDBOXCHASSISSPEC = 'Cardbox' # 50 slot virtual chassis used to place cards
+
+#readers configuration
+DURATION = 500 # the time to spend reading tags, in milliseconds 
+REGION = Reader::Region::NA 
+
+READERS = [
+  ['FP-bay002-Centigram Cabinet-001', 'tmr://192.168.1.200'],
+  ['FP-bay002-System Cabinet-001', 'tmr://192.168.1.201'],
+  ['Atlanta Datacenter', 'tmr://192.168.1.202'],  
+  ['Sample - Depot Plan', 'tmr://192.168.1.203']
+]
+
+
+----------------------------------------------
+Cardbox model creation
+----------------------------------------------
+Log in into NRM and go to the 'Equiment Library' application
+create a new Chassis with the following attributes
+name    : Cardbox
+vendor  : Spares
+subtype : SparePart
+width   : 30
+depth   : 30
+height  : 200
+descr.  : Cardbox container for cards
+
+add slots, at least the same number of gear you want to manage
+save and publish
+
+
+----------------------------------------------
+RFID tags gear association
+----------------------------------------------
+Log in into NRM and go to the 'Facilities Designer' application
+for each device/card you want to manage set the following attributes:
+RFID tag: the tag associated with the device
+Slot    : the slot of the cardbox where the device is going to be moved. Make sure each device goes to a different slot
 
 
 ----------------------------------------------
 Test
 ----------------------------------------------
 $ cd thingmagic
-$ ./reader.rb #start the reader process
+$ ./reader.rb #start the readers process
 
 
 ----------------------------------------------
 Updates
 ----------------------------------------------
-To update your local copy:
 $ cd thingmagic
 $ git pull
 
