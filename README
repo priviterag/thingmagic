@@ -67,7 +67,7 @@ $ ./reader.rb #start the reader process
 ----------------------------------------------
 Updates
 ----------------------------------------------
-To update your local copy execute:
+To update your local copy:
 $ cd thingmagic
 $ git pull
 

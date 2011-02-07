@@ -33,13 +33,18 @@ def find_entities_by_mixin klass, mixin, conditions
   ).getRootEntities
 end
 
-def get_model(search_filter)
+def get_model_from_library(search_filter)
   begin
     spec_description_key = $library_api.findSpecDescriptions(search_filter)[0]
     $facility_api.getModelFromLibraryKey(spec_description_key)
   rescue Exception => e
-    return nil
+    nil
   end
+end
+
+def get_chassis_slots chassis
+  model = get_device_model(chassis)
+  slots = get_related_entities(model, 'slots')
 end
 
 def get_device_model device
@@ -49,5 +54,10 @@ end
 def get_related_entities entity , relationship
   $facility_api.find(entity,Query.findRelatives(relationship)).getRelatedEntities(entity,relationship)
 end
+
+def get_mixin_data entity, mixin_name
+  mixin = $facility_api.getMixinData(entity, mixin_name)
+end
+
 
 

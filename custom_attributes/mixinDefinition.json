@@ -8,6 +8,10 @@
        "Updated at": {
            "type": "STRING",
            "noCopy": true
+       },
+       "Slot": {
+           "type": "INT",
+           "noCopy": true
        }
    }
 }

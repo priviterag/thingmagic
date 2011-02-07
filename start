@@ -1,1 +1,1 @@
-jruby -J-Djruby.thread.pooling=true reader.rb
+jruby --server reader.rb

@@ -28,8 +28,7 @@ TAGS = [
   TagReadData.new('rfid9'),
   TagReadData.new('rfid10')
 ]
-
-TAGS_NUM = 10
+TAGS_NUM = TAGS.lenght
 SLEEP_MIN = 10
 SLEEP_RANGE = 20
 SIMULATED = true
@@ -82,14 +81,47 @@ class ProxyReader
     if equipment.java_kind_of? DetachedChassis
       if @parent.java_kind_of? DetachedRack
         $facility_api.addChassisToRack equipment, @parent, 0.1
-        puts "#{name} - equipment #{equipment.name} entered"
-      else
+        puts "#{name} - equipment:#{equipment.name} rfid:#{tag} entered"
+      else # is a plan
         $facility_api.addItemToPlan equipment, @parent, 100, 100, 0
-        puts "#{name} - equipment #{equipment.name} entered"
+        puts "#{name} - equipment:#{equipment.name} rfid:#{tag} entered"
       end
-    else
-      puts "#{name} - equipment #{equipment.name} entered"
-      #$facility_api.addCardToDevice equipment, @cardbox_chassis, 100, 100, 0
+    else #is a card
+      #find the cardbox
+      cardbox = find_entity_by_name(DetachedChassis.java_class, "cardbox-#{@parent.name}")
+      raise ApplicationError, "process_tag(#{tag}) - cardbox-#{@parent.name} not found" if cardbox.nil?
+
+      #get the slots of the cardbox
+      slots = get_chassis_slots(cardbox)
+      #sort by number
+      slots = slots.sort {|x,y| x.number < y.number ? -1 : x.number > y.number ? 1 : 0}
+    
+      #get the model of the card
+      model = get_device_model(equipment)
+      #get the mixin
+      equipment_mixin = get_mixin_data(equipment, 'ThingMagic')
+      equipment_rfid = equipment_mixin.get('RFID tag')
+      equipment_slot = equipment_mixin.get('Slot')
+      equipment_name = equipment.name
+      #delete the card
+      $facility_api.deleteCard(equipment)
+      
+      #create the new card and set the mixin
+      card = $facility_api.createCard(model,equipment_name)
+      card_mixin = get_mixin_data(card, 'ThingMagic')
+      card_mixin.put('RFID tag', equipment_rfid)
+      card_mixin.put('Updated at', Time.now)
+      card_mixin.put('Slot', equipment_slot)
+      $facility_api.saveMixinData(card, card_mixin)		
+      
+      #get the slot number       
+      slot = slots[(equipment_slot-1)]
+      puts "slot: #{slot}"
+      
+      #add the card to the parent      
+      $facility_api.addCardToDevice(card,cardbox,slot)
+                  
+      puts "#{name} - equipment:#{equipment.name} rfid:#{tag} entered"
     end
     
   end
@@ -126,7 +158,7 @@ class ProxyReader
   	raise ApplicationError, "configure_containers - parent entity #{parent_entity_name} not found" if @parent.nil?
   	
     #find the models of the virtual containers
-    cardbox_chassis_model = get_model(LibrarySearchFilter.createChassisFilter(CARDBOXCHASSISSPEC))
+    cardbox_chassis_model = get_model_from_library(LibrarySearchFilter.createChassisFilter(CARDBOXCHASSISSPEC))
     raise ApplicationError, "configure_containers - #{CARDBOXCHASSISSPEC} not found in the library" if cardbox_chassis_model.nil?
     
     #search the virtual containers and create if not found
